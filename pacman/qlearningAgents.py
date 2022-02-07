@@ -12,11 +12,9 @@ class QLearningAgent(WeightedLearningAgent):
 
 class PacmanQAgent(PacmanWeightedAgent):
     def __init__(self, **args):
-        self.index = 0  # This is always Pacman
         PacmanWeightedAgent.__init__(self, **args)
 
 
 class ApproximateQAgent(ApproximateWeightedAgent):
-    def __init__(self, extractor='IdentityExtractor', **args):
-        self.featExtractor = util.lookup(extractor, globals())()
+    def __init__(self, **args):
         ApproximateWeightedAgent.__init__(self, **args)

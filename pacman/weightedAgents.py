@@ -137,12 +137,3 @@ class ApproximateWeightedAgent(PacmanWeightedAgent):
         difference = reward + self.discount * self.getValue2(nextState) - self.getQValue2(state, action)
         for feature in features:
           self.weights2[feature] += self.alpha * difference * features[feature]
-
-    def final(self, state):
-        PacmanWeightedAgent.final(self, state)
-
-        # did we finish training?
-        if self.episodesSoFar == self.numTraining:
-            # you might want to print your weights here for debugging
-            #print('self.weights',self.weights)
-            pass
