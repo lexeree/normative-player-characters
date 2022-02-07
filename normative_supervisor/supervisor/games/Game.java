@@ -49,7 +49,7 @@ public class Game {
 		}
 		else if(reasonerType.equals("DDPL2")) {
 			translator = new DDPLTranslator2(normBase);
-			reasoner = new DDPLReasoner2(this);
+			reasoner = new DDPLReasoner2(this, false);
 			translator.init(environment, actions);
 		}
 		//add new reasoners here

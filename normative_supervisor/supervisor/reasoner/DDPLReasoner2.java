@@ -38,11 +38,13 @@ public class DDPLReasoner2 extends Reasoner {
 	Theory copy = new Theory();
 	DDPLTranslator translator;
 	Set<Literal> literals;
+	boolean permissive;
 
-	public DDPLReasoner2(Game g) {
+	public DDPLReasoner2(Game g, boolean perm) {
 		super(g);
 		gameState = new DDPLReasonerCore();
 		translator = (DDPLTranslator) g.getTranslator();
+		permissive = perm;
 	}
 
 	@Override
@@ -111,7 +113,7 @@ public class DDPLReasoner2 extends Reasoner {
 		Map<String, Integer> scores = new HashMap<String, Integer>();
 		int min = Integer.MAX_VALUE;
 		for(String act : possible) {
-			int score = evaluateAction(act, true);
+			int score = evaluateAction(act, permissive);
 			scores.put(act, score);
 			if(score < min) {
 				min = score;
@@ -139,7 +141,7 @@ public class DDPLReasoner2 extends Reasoner {
 				l1.removeMode();
 				Literal l2 = l1.getComplementClone();
 				if(perm) {
-					if(concl.get(l2).containsKey(ConclusionType.DEFEASIBLY_PROVABLE)){
+					if(concl.keySet().contains(l2) && concl.get(l2).containsKey(ConclusionType.DEFEASIBLY_PROVABLE)){
 						score += 1;
 					}
 				}

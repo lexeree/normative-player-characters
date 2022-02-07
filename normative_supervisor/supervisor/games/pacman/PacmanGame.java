@@ -41,7 +41,7 @@ public class PacmanGame extends Game{
 		}
 		else if(reasonerType.equals("DDPL2")) {
 			translator = new PacmanToDDPL2(normBase);
-			reasoner = new DDPLReasoner2(this);
+			reasoner = new DDPLReasoner2(this, true);
 			translator.init(environment, actions);
 		}
 		
