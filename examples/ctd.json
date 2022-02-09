@@ -1,0 +1,15 @@
+{
+"name": "pacman",
+"request": "FILTER", 
+"possible": ["East", "West", "Stop"], 
+"reasoner": "DDPL", 
+"game": {"blue_eaten": 0, 
+         "orange_eaten": 0, 
+         "score": 650, 
+         "layout": [{"position": {"y": 1, "x": 2}, "type": "p"}, 
+                    {"position": {"y": 2.0, "x": 1.0}, "type": "sc_b"}, 
+                    {"position": {"y": 1.0, "x": 3.0}, "type": "sc_o"}], 
+         "dimension": {"y": 11, "x": 20}}, 
+"norms": "passive-vegan", 
+"id": 277
+}
