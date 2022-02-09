@@ -4,18 +4,18 @@
 game='pacman'
 normbase='vegan'
 reasoner='DDPL'
-agent='PacmanWeightedAgent'
-approximated='no'
-extractor=''
+agent='ApproximateQAgent'
+approximated='yes'
+extractor='HungryExtractor'
 weight=''
-num_train='1000'
+num_train='200'
 num_games='100'
 record='test'
-RTCC='no'
-NGRL='yes'
+RTCC='yes'
+NGRL='no'
 fixed_seed='yes'
 graphics='no'
-layout='littleClassic'
+layout=''
 
 
 
@@ -73,7 +73,6 @@ fi
 opt=$lab$ex$extractor$com$w$weight
 all=$(($num_train+$num_games))
 ll=$lab2$layout
-echo $opt
 
 
 #--------------------------------------------------------
