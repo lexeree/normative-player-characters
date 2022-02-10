@@ -249,15 +249,15 @@ public class PacmanToDDPL extends DDPLTranslator {
 		try {
 			ArrayList<ConstitutiveNorm> actNorms = normBase.getActionConstitutiveNorms();
 			for(ConstitutiveNorm n : actNorms) {
-				Rule rule1;
-				Rule rule2;
-				if(n.getName().contains("strategy")) {
+				Rule rule1 = new Rule("pos:"+n.getName(), RuleType.STRICT);
+				Rule rule2 = new Rule("neg:-"+n.getName(), RuleType.DEFEASIBLE);
+				/*if(n.getName().contains("strategy")) {
 					rule1 = new Rule("pos:"+n.getName(), RuleType.STRICT);
 					rule2 = new Rule("neg:-"+n.getName(), RuleType.STRICT);
 				} else {
 					rule1 = new Rule("pos:"+n.getName(), RuleType.DEFEASIBLE);
 					rule2 = new Rule("neg:-"+n.getName(), RuleType.DEFEASIBLE);
-				}
+				}*/
 				for(Term term : n.getContext()) {
 					if(term.isPredicate()) {
 						try {
@@ -302,58 +302,6 @@ public class PacmanToDDPL extends DDPLTranslator {
 	}
 	
 	
-	public void generateActionConstitutiveRules2(PacmanEnvironment board) {
-		try {
-			ArrayList<ConstitutiveNorm> actNorms = normBase.getActionConstitutiveNorms();
-			for(ConstitutiveNorm n : actNorms) {
-				Rule rule1;
-				Rule rule2;
-				if(n.getName().contains("strategy")) {
-					rule1 = new Rule("pos:"+n.getName(), RuleType.STRICT);
-					rule2 = new Rule("neg:-"+n.getName(), RuleType.STRICT);
-				} else {
-					rule1 = new Rule("pos:"+n.getName(), RuleType.DEFEASIBLE);
-					rule2 = new Rule("neg:-"+n.getName(), RuleType.DEFEASIBLE);
-				}
-				for(Term term : n.getContext()) {
-					if(term.isPredicate()) {
-						try {
-							unaryPredicateToFact(term, board.getObject(term.getBaseObject()));
-						} catch(NullPointerException e) {}
-						try {
-							binaryPredicateToConstitutive(term, board.getObject(term.getBaseObject()), board.getObject(term.getSateliteObject()));
-						} catch(NullPointerException e) {}
-						
-					}
-					Literal lit = termToLit(term, false);
-					rule1.addBodyLiteral(lit);
-					rule2.addBodyLiteral(lit);
-				}
-				//positive
-				for(Term term : n.getLowerTerms()) {
-					Literal lit1 = termToLit(term, false);
-					rule1.addBodyLiteral(lit1);
-				}
-				Literal head1 = termToLit(n.getHigherTerm(), false);	
-				rule1.addHeadLiteral(head1);
-				rules.add(rule1);
-				strategies.add(rule1);
-				//contrapositive
-				Literal lit2 = termToLit(n.getHigherTerm(), false).getComplementClone();
-				rule2.addBodyLiteral(lit2);
-				for(Term term : n.getLowerTerms()) {
-					Literal head2 = termToLit(term, false).getComplementClone();
-					rule2.addHeadLiteral(head2);
-					rules.add(rule2);
-					strategies.add(rule2);
-				}
-			}
-		}
-		catch (RuleException e) {
-			e.printStackTrace();
-		}
-	}
-	
 
     public void generateConstitutiveRules(PacmanEnvironment board) {
     	rules.clear();
@@ -361,11 +309,6 @@ public class PacmanToDDPL extends DDPLTranslator {
     	generateActionConstitutiveRules(board);
     }
     
-    public void generateConstitutiveRules2(PacmanEnvironment board) {
-    	rules.clear();
-    	generateStateConstitutiveRules(board);
-    	generateActionConstitutiveRules2(board);
-    }
 		
 	
 

@@ -136,15 +136,15 @@ public class DDPLTranslator extends Translator {
 		try {
 			ArrayList<ConstitutiveNorm> actNorms = normBase.getActionConstitutiveNorms();
 			for(ConstitutiveNorm n : actNorms) {
-				Rule rule1;
-				Rule rule2;
-				if(n.getName().contains("strategy")) {
+				Rule rule1 = new Rule("pos:"+n.getName(), RuleType.DEFEASIBLE);
+				Rule rule2 = new Rule("neg:-"+n.getName(), RuleType.DEFEASIBLE);
+				/*if(n.getName().contains("strategy")) {
 					rule1 = new Rule("pos:"+n.getName(), RuleType.STRICT);
 					rule2 = new Rule("neg:-"+n.getName(), RuleType.STRICT);
 				} else {
 					rule1 = new Rule("pos:"+n.getName(), RuleType.DEFEASIBLE);
 					rule2 = new Rule("neg:-"+n.getName(), RuleType.DEFEASIBLE);
-				}
+				}*/
 				for(Term term : n.getContext()) {
 					Literal lit = termToLit(term, false);
 					rule1.addBodyLiteral(lit);

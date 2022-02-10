@@ -92,12 +92,22 @@ public class DDPLReasoner extends Reasoner{
     	
     	for(Literal a_lit : translator.getActionLits()) {
     		if(possible.contains(a_lit.getName())) {
-    			//Map<ConclusionType, Conclusion> concl_pos = conclusions.get(a_lit.cloneWithMode(obl));
-    			Map<ConclusionType, Conclusion> concl_neg = conclusions.get(a_lit.getComplementClone().cloneWithMode(obl));
+    			Map<ConclusionType, Conclusion> concl_pos;
+    			Map<ConclusionType, Conclusion> concl_neg;
+    			if(conclusions.containsKey(a_lit.cloneWithMode(obl))) {
+    				concl_pos = conclusions.get(a_lit.cloneWithMode(obl));
+    			} else {
+    				concl_pos = new HashMap<ConclusionType, Conclusion>();
+    			}
+    			if(conclusions.containsKey(a_lit.getComplementClone().cloneWithMode(obl))) {
+    				concl_neg = conclusions.get(a_lit.getComplementClone().cloneWithMode(obl));
+    			} else {
+    				concl_neg = new HashMap<ConclusionType, Conclusion>();
+    			}
     			
     			//check that no conclusions are missing; this indicates non-concurrence rules have been triggered
-        		if(//(!concl_pos.containsKey(ConclusionType.DEFEASIBLY_PROVABLE) && 
-        			//	!concl_pos.containsKey(ConclusionType.DEFEASIBLY_NOT_PROVABLE)) ||
+        		if((!concl_pos.containsKey(ConclusionType.DEFEASIBLY_PROVABLE) && 
+        				!concl_pos.containsKey(ConclusionType.DEFEASIBLY_NOT_PROVABLE)) ||
         				(!concl_neg.containsKey(ConclusionType.DEFEASIBLY_PROVABLE) && 
                 				!concl_neg.containsKey(ConclusionType.DEFEASIBLY_NOT_PROVABLE))) {
         			return new ArrayList<String>();
