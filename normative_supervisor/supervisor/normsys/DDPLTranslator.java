@@ -89,6 +89,7 @@ public class DDPLTranslator extends Translator {
 	}
 	
 	public void labelsToFacts(Environment env) {
+		facts.clear();
 		for(String lab : env.getLabels()) {
 			Literal lit = new Literal(lab);
 			Rule fact = new Rule(lab, RuleType.FACT);

@@ -83,4 +83,4 @@ sleep 1
 
 cd $game
 
-python2 pacman.py -p $agent $ll $opt $f $q -x $num_train -n $all --norm $normbase --reason $reasoner $s $l --rec $record --port 6666 
+python2 $game.py -p $agent $ll $opt $f $q -x $num_train -n $all --norm $normbase --reason $reasoner $s $l --rec $record --port 6666 
