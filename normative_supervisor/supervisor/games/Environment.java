@@ -22,14 +22,17 @@ import util.MethodNotImplementedException;
 public class Environment {
 	protected int gridX;
 	protected int gridY;
-	ArrayList<String> labels = new ArrayList<String>();
+	ArrayList<String> pos_labels = new ArrayList<String>();
+	ArrayList<String> neg_labels = new ArrayList<String>();
+	ArrayList<String> all_labels = new ArrayList<String>();
 	
 	public Environment() {
 	}
 	
-	public Environment(int x, int y) {
+	public Environment(int x, int y, ArrayList<String> all_labs) {
 		gridX = x;
 		gridY = y;
+		all_labels = all_labs;
 	}
 	
 	public Environment(File gridfile) throws MethodNotImplementedException {
@@ -42,11 +45,20 @@ public class Environment {
 	}
 	
 	public void setLabels(ArrayList<String> lab) {
-		labels = lab;
+		pos_labels = lab;
+		for(String l : all_labels) {
+			if(!pos_labels.contains(l)) {
+				neg_labels.add(l);
+			}
+		}
 	}
 	
-	public ArrayList<String> getLabels(){
-		return labels;
+	public ArrayList<String> getPosLabels(){
+		return pos_labels;
+	}
+	
+	public ArrayList<String> getNegLabels(){
+		return neg_labels;
 	}
 	
 }

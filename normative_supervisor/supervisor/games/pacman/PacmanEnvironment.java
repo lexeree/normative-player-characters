@@ -90,7 +90,7 @@ public class PacmanEnvironment extends Environment {
 	
 	public PacmanEnvironment(int x, int y, ArrayList<PacmanGameObject> w, ArrayList<PacmanGameObject> f, 
 			ArrayList<PacmanGameObject> chars) {
-		super(x, y);
+		super(x, y, new ArrayList<String>());
 		walls = w;
 		food = f;
 		for(PacmanGameObject ch : chars) {

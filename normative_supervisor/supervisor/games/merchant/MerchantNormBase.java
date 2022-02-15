@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import supervisor.normsys.ConstitutiveNorm;
+import supervisor.normsys.ExceptionNorm;
 import supervisor.normsys.Modality;
 import supervisor.normsys.NormBase;
 import supervisor.normsys.RegulativeNorm;
@@ -85,26 +86,29 @@ public class MerchantNormBase extends NormBase {
 		Term wood = new Term("at_wood", false, false, false);
 		ctxt2.add(tree);
 		ctxt3.add(wood);
-		Term extract = new Term("extract", false, false, true);
-		Term pickup = new Term("pickup", false, false, true);
+		Term extract = new Term("Extract", false, false, true);
+		Term pickup = new Term("Pickup", false, false, true);
 		ctas2.add(extract);
 		ctas3.add(pickup);
 		ConstitutiveNorm extractdef = new ConstitutiveNorm("C(extract,deforest)", ctxt2, ctas2, deforest);
 		addActionConstitutiveNorm(extractdef);
 		ConstitutiveNorm pickupdef = new ConstitutiveNorm("C(pickup,deforest)", ctxt3, ctas3, deforest);
 		addActionConstitutiveNorm(pickupdef);
-	    Term has = new Term("has_wood", false, false, false);
+	    Term has = new Term("has_wood", true, false, false);
 	    ctxt4.add(has);
-	    ctxt4.add(wood);
 	    Term ppickup = pickup.copy();
 	    ppickup.setMode(Modality.PERMISSION);
+	    ctxt5.add(ppickup);
 	    Term pextract = extract.copy();
 	    pextract.setMode(Modality.PERMISSION);
-	    RegulativeNorm nowood = new RegulativeNorm("P(pickup)", ctxt4, ppickup);
-	    addRegulativeNorm(nowood);
-	    ctxt5.add(ppickup);
-	    RegulativeNorm depper = new RegulativeNorm("P(extract)", ctxt5, pextract);
-	    addRegulativeNorm(depper);
+		try {
+			 ExceptionNorm nowood = new ExceptionNorm("P(pickup)", ctxt4, ppickup);
+			 addExceptionNorm(nowood);
+			 ExceptionNorm depper = new ExceptionNorm("P(extract)", ctxt5, pextract);
+			 addExceptionNorm(depper);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 }

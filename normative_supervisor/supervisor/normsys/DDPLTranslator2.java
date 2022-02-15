@@ -34,7 +34,7 @@ public class DDPLTranslator2 extends DDPLTranslator {
 					Literal lit1 = termToLit(term, false);
 					rule.addBodyLiteral(lit1);
 				}
-				Literal head1 = termToLit(n.getHigherTerm(), false);	
+				Literal head1 = termToLit(n.getHigherTerm(), true);	
 				rule.addHeadLiteral(head1);
 				rules.add(rule);
 				strategies.add(rule);

@@ -20,6 +20,7 @@ import supervisor.games.Game;
 
 public class DDPLTranslator extends Translator {
 	protected Mode obl = new Mode("O", false);
+	protected Mode perm = new Mode("P", false);
 	protected ArrayList<Literal> actionLits = new ArrayList<Literal>();
 	protected ArrayList<Literal> gameLits = new ArrayList<Literal>();
 	protected ArrayList<Rule> facts = new ArrayList<Rule>();
@@ -69,7 +70,9 @@ public class DDPLTranslator extends Translator {
 			}
 		}
 		else if (term.getModes().contains(Modality.PERMISSION)) {
-			//do nothing?
+			if(!head) {
+				lit.setMode(perm);
+			}
 		}
 		if(term.isNegated()) {
 			lit = lit.getComplementClone();
@@ -90,14 +93,21 @@ public class DDPLTranslator extends Translator {
 	
 	public void labelsToFacts(Environment env) {
 		facts.clear();
-		for(String lab : env.getLabels()) {
+		for(String lab : env.getPosLabels()) {
 			Literal lit = new Literal(lab);
 			Rule fact = new Rule(lab, RuleType.FACT);
 			try {
 				fact.addHeadLiteral(lit);
-			} catch (RuleException e) {
-				e.printStackTrace();
-			}
+			} catch (RuleException e) {}
+			facts.add(fact);
+		}
+		for(String lab : env.getNegLabels()) {
+			Literal lit = new Literal(lab);
+			Literal nlit = lit.getComplementClone();
+			Rule fact = new Rule(lab, RuleType.FACT);
+			try {
+				fact.addHeadLiteral(nlit);
+			} catch (RuleException e) {}
 			facts.add(fact);
 		}
 	}
@@ -157,7 +167,7 @@ public class DDPLTranslator extends Translator {
 					lit1.setMode(obl);
 					rule1.addBodyLiteral(lit1);
 				}
-				Literal head1 = termToLit(n.getHigherTerm(), false);	
+				Literal head1 = termToLit(n.getHigherTerm(), true);	
 				rule1.addHeadLiteral(head1);
 				rule1.setMode(obl);
 				rules.add(rule1);
@@ -219,13 +229,19 @@ public class DDPLTranslator extends Translator {
 	public void generateDefeaters() {
 		ArrayList<ExceptionNorm> permNorms = normBase.getExceptionNorms();
         for(ExceptionNorm n : permNorms) {
-			Rule rule = new Rule(n.getName(), RuleType.DEFEATER);
+        	Rule permr = new Rule(n.getName(), RuleType.DEFEASIBLE);
+			Rule rule = new Rule("~"+n.getName(), RuleType.DEFEATER);
 			try {
 				for(Term term : n.getContext()) {
 					Literal lit = termToLit(term, false);
-					rule.addBodyLiteral(lit);
+					permr.addBodyLiteral(lit);
 				}
 				Literal lit = termToLit(n.getException(), true);
+				permr.addHeadLiteral(lit);
+				permr.setMode(perm);
+				norms.add(permr);
+				Literal litp = lit.cloneWithMode(perm);
+				rule.addBodyLiteral(litp);
 				rule.addHeadLiteral(lit);
 				rule.setMode(obl);
 				norms.add(rule);

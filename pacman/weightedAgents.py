@@ -22,35 +22,11 @@ class WeightedLearningAgent(ReinforcementAgent):
     def getQValue2(self, state, action):
         return self.QValues2[(state, action)]
 
-    def computeValueFromQValues1(self, state):
-        qvals = [self.getQValue1(state, action) for action in self.legalActions]
-        if not qvals:
-            return 0.0
-        return max(qvals)
-
-
-    def computeValueFromQValues2(self, state):
-        qvals = [self.getQValue2(state, action) for action in self.legalActions]
-        if not qvals:
-            return 0.0
-        return max(qvals)
-
-
     def computeValueFromQValues(self, state):
         qvals = [self.getQValue1(state, action) + self.weight*self.getQValue2(state, action) for action in self.legalActions]
         if not qvals:
             return 0.0
         return max(qvals)
-
-    def computeActionFromQValues(self, state, filter=None, train=False):
-        actions = []
-        if not self.legalActions:
-          return None
-        val = self.computeValueFromQValues(state)
-        for action in self.legalActions:
-            if val == self.getQValue1(state, action) + self.weight*self.getQValue2(state, action):
-                actions.append(action)
-        return random.choice(actions)
 
     def getAction(self, state, filter=None, train=False, supervise=False):
         self.legalActions = self.getLegalActions(state, filter, train, supervise)
@@ -75,13 +51,26 @@ class WeightedLearningAgent(ReinforcementAgent):
                     reward + self.discount * self.getValue2(nextState))
 
     def getPolicy(self, state):
-        return self.computeActionFromQValues(state)
+        actions = []
+        if not self.legalActions:
+            return None
+        val = self.computeValueFromQValues(state)
+        for action in self.legalActions:
+            if val == self.getQValue1(state, action) + self.weight * self.getQValue2(state, action):
+                actions.append(action)
+        return random.choice(actions)
 
     def getValue1(self, state, filter=None, train=False):
-        return self.computeValueFromQValues1(state)
+        qvals = [self.getQValue1(state, action) for action in self.legalActions]
+        if not qvals:
+            return 0.0
+        return max(qvals)
 
     def getValue2(self, state, filter=None, train=False):
-        return self.computeValueFromQValues2(state)
+        qvals = [self.getQValue2(state, action) for action in self.legalActions]
+        if not qvals:
+            return 0.0
+        return max(qvals)
 
 
 class PacmanWeightedAgent(WeightedLearningAgent):

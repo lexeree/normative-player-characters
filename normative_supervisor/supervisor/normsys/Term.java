@@ -122,7 +122,7 @@ public class Term {
 	
 	public void negate() {
 		negated = !negated;
-		label = "-"+label;
+		//label = "-"+label;
 	}
 	
 	

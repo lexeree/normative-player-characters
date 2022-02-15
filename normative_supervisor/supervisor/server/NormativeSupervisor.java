@@ -159,7 +159,7 @@ public class NormativeSupervisor {
 		
 	
 	public Environment parseGame() {
-		Environment env = new Environment(0,0);
+		Environment env = new Environment(0,0, util.getAllLabels(name));
 		env.setLabels(labels);
 		return env;
 	}

@@ -124,6 +124,30 @@ public class ProjectUtils {
 		return str;
 	}
 	
+	public ArrayList<String> getDirs(){
+		ArrayList<String> dirs = new ArrayList<String>(Arrays.asList("North", "South", "East", "West"));
+		return dirs;
+	}
+	
+	public ArrayList<String> getAllLabels(String game){
+		ArrayList<String> all = new ArrayList<String>();
+		if(game.equals("merchant")) {
+			ArrayList<String> cells = new ArrayList<String>(Arrays.asList("wood", "ore", "tree", "rock", "danger"));
+			for(String c : cells) {
+				all.add("at_"+c);
+			}
+			for(String dir : getDirs()) {
+				for(String c : cells) {
+					all.add(dir+"_"+c);
+				}
+			}
+			all.add("has_wood");
+			all.add("has_ore");
+			all.add("attacked");
+		}
+		return all;
+	}
+	
 	public NormBase defaultNormBase(String game, String type) {
 		NormBase nb;
 		if(game.equals("merchant")) {

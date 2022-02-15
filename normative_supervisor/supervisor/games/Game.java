@@ -26,7 +26,6 @@ public class Game {
 	protected String gameType;
 	ProjectUtils util = new ProjectUtils();
 	protected ArrayList<String> actions;
-	ArrayList<String> dirs = new ArrayList<String>(Arrays.asList("North", "South", "East", "West"));
 	ArrayList<String> possibleActions = new ArrayList<String>();
 	protected NormBase normBase;
 	protected Reasoner reasoner;
