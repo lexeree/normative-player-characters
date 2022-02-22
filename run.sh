@@ -4,17 +4,17 @@
 game='pacman'
 normbase='vegan'
 reasoner='DDPL'
-agent='ApproximateQAgent'
+agent='ApproximateTLQAgent'
 approximated='yes'
 extractor='HungryExtractor'
-weight=''
-num_train='200'
+weight='1000'
+num_train='300'
 num_games='100'
 record='test'
-RTCC='yes'
-NGRL='no'
+RTCC='no'
+NGRL='yes'
 fixed_seed='yes'
-graphics='no'
+graphics='yes'
 layout=''
 
 
@@ -25,6 +25,7 @@ layout=''
 blank=''
 yes='yes'
 no='no'
+pacman='pacman'
 if [[ $RTCC == $yes ]]; then
 s='--supervise'
 else 
@@ -40,7 +41,7 @@ f='-f'
 else 
 f=''
 fi
-if [[ $graphics == $no ]]; then
+if [[ $game == $pacman && $graphics == $no ]]; then
 q='-q'
 else 
 q=''
