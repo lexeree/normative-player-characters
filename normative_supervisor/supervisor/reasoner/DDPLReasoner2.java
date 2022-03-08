@@ -72,7 +72,7 @@ public class DDPLReasoner2 extends Reasoner {
 			gameState.setTheory(copy.clone());
 			try {
 				Literal lit = new Literal(act);
-				Rule fct = new Rule(lit.getName(), RuleType.FACT);
+				Rule fct = new Rule(lit.getName(), RuleType.DEFEASIBLE);
 				fct.addHeadLiteral(lit);
 				ArrayList<Rule> fcts = new ArrayList<Rule>();
 				fcts.add(fct);

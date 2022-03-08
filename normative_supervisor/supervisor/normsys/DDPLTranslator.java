@@ -104,7 +104,7 @@ public class DDPLTranslator extends Translator {
 		for(String lab : env.getNegLabels()) {
 			Literal lit = new Literal(lab);
 			Literal nlit = lit.getComplementClone();
-			Rule fact = new Rule(lab, RuleType.FACT);
+			Rule fact = new Rule(lab, RuleType.DEFEASIBLE);
 			try {
 				fact.addHeadLiteral(nlit);
 			} catch (RuleException e) {}
@@ -240,10 +240,9 @@ public class DDPLTranslator extends Translator {
 				permr.addHeadLiteral(lit);
 				permr.setMode(perm);
 				norms.add(permr);
-				Literal litp = lit.cloneWithMode(perm);
-				rule.addBodyLiteral(litp);
-				rule.addHeadLiteral(lit);
-				rule.setMode(obl);
+				rule.addBodyLiteral(lit.cloneWithMode(perm));
+				rule.addHeadLiteral(lit.getComplementClone());
+				//rule.setMode(obl);
 				norms.add(rule);
 			}
 			catch (RuleException e) {
