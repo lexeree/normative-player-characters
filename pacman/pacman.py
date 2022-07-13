@@ -573,6 +573,8 @@ def readCommand( argv ):
                       default=None)
     parser.add_option('--supervise', action='store_true', dest='supervise', help='Use normative supervisor?', default=False)
     parser.add_option('--learn', action='store_true', dest='learn', help='Learn with norms - only choose with MORL agent', default=False)
+    parser.add_option('--partial', action='store_true', dest='partial',
+                      help='Learn with a partial MDP', default=False)
     #parser.add_option('--punish', type='int', dest='punish', help=default('Punishment for violation of norm base.'), default=0)
     parser.add_option('--port', type='int', dest='port', help=default('Port number.'), default=6666)
     #parser.add_option('--track', action='store_true', dest='track', default=False)
@@ -628,6 +630,7 @@ def readCommand( argv ):
     args['rec'] = options.rec
     args['supervise'] = options.supervise
     args['learn'] = options.learn
+    args['partial'] = options.partial
     args['port'] = options.port
     #if options.track:
     #    with open('actions.csv', 'w') as file:
@@ -687,7 +690,7 @@ def replayGame( layout, actions, display ):
     display.finish()
 
 def runGames( layout, pacman, ghosts, display, numGames, record, numTraining = 0, catchExceptions=False, timeout=30,
-              norm=None, reason=None, rec=None, supervise=False, learn=False, port=6666):
+              norm=None, reason=None, rec=None, supervise=False, learn=False, partial=False, port=6666):
     import __main__
     __main__.__dict__['_display'] = display
 
@@ -710,12 +713,18 @@ def runGames( layout, pacman, ghosts, display, numGames, record, numTraining = 0
             import textDisplay
             gameDisplay = textDisplay.NullGraphics()
             rules.quiet = True
-            train = True
+            if partial:
+                train = False
+                sup = True
+            else:
+                train = True
+                sup = supervise
         else:
             gameDisplay = display
             rules.quiet = False
             train = False
-        game = rules.newGame( layout, pacman, ghosts, gameDisplay, beQuiet, catchExceptions, filt, train, supervise, learn)
+            sup = supervise
+        game = rules.newGame( layout, pacman, ghosts, gameDisplay, beQuiet, catchExceptions, filt, train, sup, learn)
         game.run()
         if not beQuiet: games.append(game)
 

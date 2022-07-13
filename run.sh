@@ -4,18 +4,19 @@
 game='pacman'
 normbase='vegan'
 reasoner='DDPL'
-agent='ApproximateTLQAgent'
-approximated='yes'
-extractor='HungryExtractor'
-weight='1000'
-num_train='300'
-num_games='100'
+agent='PacmanQAgent'
+approximated='no'
+extractor=''
+weight=''
+num_train='9000'
+num_games='10'
 record='test'
 RTCC='no'
-NGRL='yes'
+NGRL='no'
+part='yes'
 fixed_seed='yes'
 graphics='yes'
-layout=''
+layout='littleClassic'
 
 
 
@@ -33,6 +34,11 @@ s=''
 fi
 if [[ $NGRL == $yes ]]; then
 l='--learn'
+else 
+l=''
+fi
+if [[ $part == $yes ]]; then
+l='--partial'
 else 
 l=''
 fi
