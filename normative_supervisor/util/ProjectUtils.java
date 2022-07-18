@@ -98,6 +98,16 @@ public class ProjectUtils {
 		return lits;
 	}
 	
+	public Set<String> getLitNames(Collection<Literal> list) {
+		Set<String> lits = new HashSet<String>();
+		for(Literal l : list) {
+			lits.add(l.getName());
+		}
+		return lits;
+	}
+	
+	
+	
 	public boolean containsSome(String test, List<String> liststr) {
 		for(String str : liststr) {
 			if(test.contains(str)) {
@@ -155,8 +165,39 @@ public class ProjectUtils {
 			if (type.equals("pacifist")) {
 				((MerchantNormBase) nb).generatePacifist();
 			}
-			else if (type.equals("green")) {
-				((MerchantNormBase) nb).generateGreen();
+			else if (type.equals("pacifist-weak")) {
+				((MerchantNormBase) nb).weakPacifist();
+			}
+			else if (type.equals("green1")) {
+				((MerchantNormBase) nb).generateGreen1();
+			}
+			else if (type.equals("green2")) {
+				((MerchantNormBase) nb).generateGreen2();
+			}
+		}
+		else {
+			nb = new NormBase(type);
+		}
+		
+		
+		return nb;
+	}
+	
+	public NormBase defaultNormSys(String game, String type) {
+		NormBase nb;
+		if(game.equals("merchant")) {
+			nb = new MerchantNormBase(type);
+			if (type.equals("pacifist")) {
+				((MerchantNormBase) nb).directPacifist();
+			}
+			else if (type.equals("pacifist-weak")) {
+				((MerchantNormBase) nb).weakPacifist();
+			}
+			else if (type.equals("green1")) {
+				((MerchantNormBase) nb).generateGreen1();
+			}
+			else if (type.equals("green2")) {
+				((MerchantNormBase) nb).generateGreen2();
 			}
 		}
 		else {
@@ -186,13 +227,16 @@ public class ProjectUtils {
 			nb.generateMoveAction();
 		}
         else if(type.equals("hungry")) {
-        	nb = new PacmanNormBase(type);
 			nb.eatFood();
 		}
         else if(type.equals("vegan")) {
-        	nb = new PacmanNormBase(type);
         	nb.vegan("bGhost");
         	nb.vegan("oGhost");
+        }
+        else if(type.equals("unfair-vegan")) {
+        	nb.vegan("bGhost");
+        	nb.vegan("oGhost");
+        	nb.prefVegan("bGhost");
         }
         else if(type.equals("safe-vegan")) {
         	nb.vegan("bGhost");
@@ -208,6 +252,11 @@ public class ProjectUtils {
     		danger.add(new Float[] {(float) 18.0, (float) 1.0});
         	nb.vegan("bGhost");
         	nb.danger(danger, "bGhost");
+        }
+        else if(type.equals("hungry-vegetarian")) {
+        	nb.vegan("bGhost");
+        	nb.vegan("oGhost");
+        	nb.eat("oGhost");
         }
         else if(type.equals("give-up-vegan")) {
         	nb.vegan("bGhost");

@@ -9,13 +9,13 @@ approximated='no'
 extractor=''
 weight=''
 num_train='9000'
-num_games='10'
-record='test'
+num_games='1000'
+record='test2'
 RTCC='no'
 NGRL='no'
 part='yes'
 fixed_seed='yes'
-graphics='yes'
+graphics='no'
 layout='littleClassic'
 
 
@@ -38,9 +38,9 @@ else
 l=''
 fi
 if [[ $part == $yes ]]; then
-l='--partial'
+p='--partial'
 else 
-l=''
+p=''
 fi
 if [[ $fixed_seed == $yes ]]; then
 f='-f'
@@ -90,4 +90,4 @@ sleep 1
 
 cd $game
 
-python2 $game.py -p $agent $ll $opt $f $q -x $num_train -n $all --norm $normbase --reason $reasoner $s $l --rec $record --port 6666 
+python2 $game.py -p $agent $ll $opt $f $q -x $num_train -n $all --norm $normbase --reason $reasoner $s $l $p --rec $record --port 6666 

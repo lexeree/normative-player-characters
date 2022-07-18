@@ -104,7 +104,7 @@ public class PacmanToDDPL extends DDPLTranslator {
 	public void unaryPredicateToFact(Term term, PacmanGameObject base) {
 		//HACKY SOLUTION (FIX)
 		boolean cheat = false;
-		if(base.getLabel().contains("Ghost")) {
+		if(base.getLabel().contains("scared")) {
 			cheat = base.isScared();
 		} 
 		if(cheat || term.evaluateUnary(base)) {
@@ -249,7 +249,7 @@ public class PacmanToDDPL extends DDPLTranslator {
 		try {
 			ArrayList<ConstitutiveNorm> actNorms = normBase.getActionConstitutiveNorms();
 			for(ConstitutiveNorm n : actNorms) {
-				Rule rule1 = new Rule("pos:"+n.getName(), RuleType.STRICT);
+				Rule rule1 = new Rule("pos:"+n.getName(), RuleType.DEFEASIBLE);
 				Rule rule2 = new Rule("neg:-"+n.getName(), RuleType.DEFEASIBLE);
 				/*if(n.getName().contains("strategy")) {
 					rule1 = new Rule("pos:"+n.getName(), RuleType.STRICT);
@@ -372,14 +372,6 @@ public class PacmanToDDPL extends DDPLTranslator {
 			catch (RuleException e) {
 				e.printStackTrace();
 			}
-		}
-	}
-	
-	@Override
-	public void generateHierarchies() {
-		for(PriorityNorm pr : normBase.getPriorityNorms()) {
-			Superiority sup = new Superiority(pr.getHigher(),pr.getLower());
-			hierarchy.add(sup);
 		}
 	}
 

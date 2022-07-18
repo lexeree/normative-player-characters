@@ -254,6 +254,52 @@ public class PacmanNormBase extends NormBase{
 	}
 	
 	
+	public void prefVegan(String satelite) {
+		ArrayList<Term> beside = generateAdjacencyTerms(true, "pacman", satelite);
+		ArrayList<Term> context = new ArrayList<Term>();
+		try {
+			Term eat = new Term("eat(pacman,"+satelite+")", false, false, true);
+			eat.setBaseObject("pacman");
+			eat.setSateliteObject(satelite);
+			Term f_eat = eat.copy();
+			f_eat.setMode(Modality.PROHIBITION);
+			RegulativeNorm eatstuff  = new RegulativeNorm("priority(pacman,"+satelite+")", context, f_eat);
+			addRegulativeNorm(eatstuff);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}	
+	}
+	
+	public void eat(String satelite) {
+		Term beside = generateAdjacencyRules(true, "pacman", satelite);
+		ArrayList<Term> context = new ArrayList<Term>();
+		context.add(beside);
+		Term scgh = new Term("scared("+satelite+")", false, true, false);
+		Predicate<PacmanGameObject> scared = new Predicate<PacmanGameObject>() {
+			@Override
+			public boolean test(PacmanGameObject base) {
+			    return base.isScared();
+			}
+		};
+		scgh.setBaseObject(satelite);
+		scgh.setUnaryPredicate(scared);
+		context.add(scgh);
+		try {
+			Term eat = new Term("eat(pacman,"+satelite+")", false, false, true);
+			eat.setBaseObject("pacman");
+			eat.setSateliteObject(satelite);
+			Term f_eat = eat.copy();
+			f_eat.setMode(Modality.OBLIGATION);
+			RegulativeNorm eatstuff  = new RegulativeNorm("eat(pacman,"+satelite+")", context, f_eat);
+			addRegulativeNorm(eatstuff);
+			PriorityNorm p = new PriorityNorm("priority", "-eat(pacman,"+satelite+")", "eat(pacman,"+satelite+")");
+			addPriorityNorm(p);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}	
+	}
+	
+	
 	public void danger(ArrayList<Float[]> zone, String satelite) {
 		ArrayList<Term> beside1 = generateAdjacencyTerms(false, "pacman", "danger");
 		for(Term term : beside1) {
