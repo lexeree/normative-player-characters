@@ -15,8 +15,6 @@ import supervisor.games.GameObject;
 public class PacmanGameObject extends GameObject{
 	boolean scared = false;
 	String objectType;
-	float objectX;
-	float objectY;
 	ArrayList<String> objects = new ArrayList<String>();
 	HashMap<String, String> objTypeMap = new HashMap<String, String>();
 	
@@ -57,31 +55,12 @@ public class PacmanGameObject extends GameObject{
     }
     
     
-    public void setCoordX(float x) {
-    	objectX = x;
-    }
-
-    
-    public void setCoordY(float y) {
- 	    objectY = y;
-    }
-    
-    
     public String getType() {
     	return objectType;
     }
     
     
-    public float getCoordX() {
-    	return objectX;
-    }
-    
-    
-    public float getCoordY() {
-    	return objectY;
-    }
-    
-    
+    @Override
     public String getLabel() {
     	String lab = objTypeMap.get(objectType);
     	return lab;
