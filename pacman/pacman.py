@@ -294,12 +294,12 @@ class ClassicGameRules:
         self.timeout = timeout
 
     def newGame( self, layout, pacmanAgent, ghostAgents, display, quiet = False, catchExceptions=False, filter=None,
-                 train=False, supervise=False, learn=False):
+                 train=False, supervise=False, learn1=False, learn2=False):
         agents = [pacmanAgent] + ghostAgents[:layout.getNumGhosts()]
         initState = GameState()
         initState.initialize( layout, len(ghostAgents) )
         game = Game(agents, display, self, catchExceptions=catchExceptions, filter=filter, train=train,
-                    supervise=supervise, learn=learn)
+                    supervise=supervise, learn1=learn1, learn2=learn2)
         game.state = initState
         self.initialState = initState.deepCopy()
         self.quiet = quiet
@@ -572,9 +572,10 @@ def readCommand( argv ):
     parser.add_option('--rec', dest='rec', help=default('Would you like to save a record of tests run? Input file name.'),
                       default=None)
     parser.add_option('--supervise', action='store_true', dest='supervise', help='Use normative supervisor?', default=False)
-    parser.add_option('--learn', action='store_true', dest='learn', help='Learn with norms - only choose with MORL agent', default=False)
-    parser.add_option('--partial', action='store_true', dest='partial',
-                      help='Learn with a partial MDP', default=False)
+    parser.add_option('--learn', action='store_true', dest='learn1', help='Learn with norms - only choose with MORL agent', default=False)
+    parser.add_option('--sublearn', action='store_true', dest='learn2',
+                      help='Learn with sub ideal reward function; only select for SubIdealAgent', default=False)
+    parser.add_option('--partial', action='store_true', dest='partial', help='Learn with a partial MDP', default=False)
     #parser.add_option('--punish', type='int', dest='punish', help=default('Punishment for violation of norm base.'), default=0)
     parser.add_option('--port', type='int', dest='port', help=default('Port number.'), default=6666)
     #parser.add_option('--track', action='store_true', dest='track', default=False)
@@ -629,7 +630,8 @@ def readCommand( argv ):
     args['reason'] = options.reason
     args['rec'] = options.rec
     args['supervise'] = options.supervise
-    args['learn'] = options.learn
+    args['learn1'] = options.learn1
+    args['learn2'] = options.learn2
     args['partial'] = options.partial
     args['port'] = options.port
     #if options.track:
@@ -690,7 +692,7 @@ def replayGame( layout, actions, display ):
     display.finish()
 
 def runGames( layout, pacman, ghosts, display, numGames, record, numTraining = 0, catchExceptions=False, timeout=30,
-              norm=None, reason=None, rec=None, supervise=False, learn=False, partial=False, port=6666):
+              norm=None, reason=None, rec=None, supervise=False, learn1=False, learn2=False, partial=False, port=6666):
     import __main__
     __main__.__dict__['_display'] = display
 
@@ -724,7 +726,7 @@ def runGames( layout, pacman, ghosts, display, numGames, record, numTraining = 0
             rules.quiet = False
             train = False
             sup = supervise
-        game = rules.newGame( layout, pacman, ghosts, gameDisplay, beQuiet, catchExceptions, filt, train, sup, learn)
+        game = rules.newGame( layout, pacman, ghosts, gameDisplay, beQuiet, catchExceptions, filt, train, sup, learn1,learn2)
         game.run()
         if not beQuiet: games.append(game)
 

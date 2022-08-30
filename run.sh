@@ -2,21 +2,22 @@
 
 #------------------ CONFIGURE ------------------
 game='pacman'
-normbase='vegan'
-reasoner='DDPL'
-agent='PacmanQAgent'
+normbase='benevolent'
+reasoner='DDPL2'
+agent='PacmanSubIdealAgent'
 approximated='no'
 extractor=''
 weight=''
-num_train='9000'
-num_games='1000'
-record='test2'
-RTCC='no'
+num_train='5000'
+num_games='100'
+record='test'
+OCC='no'
 NGRL='no'
-part='yes'
+NGRLS='yes'
+part='no'
 fixed_seed='yes'
-graphics='no'
-layout='littleClassic'
+graphics='yes'
+layout='mediumOpen'
 
 
 
@@ -27,7 +28,7 @@ blank=''
 yes='yes'
 no='no'
 pacman='pacman'
-if [[ $RTCC == $yes ]]; then
+if [[ $OCC == $yes ]]; then
 s='--supervise'
 else 
 s=''
@@ -36,6 +37,11 @@ if [[ $NGRL == $yes ]]; then
 l='--learn'
 else 
 l=''
+fi
+if [[ $NGRLS == $yes ]]; then
+l2='--sublearn'
+else 
+l2=''
 fi
 if [[ $part == $yes ]]; then
 p='--partial'
@@ -90,4 +96,4 @@ sleep 1
 
 cd $game
 
-python2 $game.py -p $agent $ll $opt $f $q -x $num_train -n $all --norm $normbase --reason $reasoner $s $l $p --rec $record --port 6666 
+python2 $game.py -p $agent $ll $opt $f $q -x $num_train -n $all --norm $normbase --reason $reasoner $s $l $l2 $p --rec $record --port 6666 

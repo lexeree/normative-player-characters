@@ -522,7 +522,7 @@ class Game:
     """
 
     def __init__( self, agents, display, rules, startingIndex=0, muteAgents=False, catchExceptions=False, filter=None,
-                  train=False, supervise=False , learn=False):
+                  train=False, supervise=False , learn1=False, learn2=False):
         self.agentCrashed = False
         self.agents = agents
         self.display = display
@@ -540,7 +540,8 @@ class Game:
         self.filter = filter
         self.train = train
         self.supervise = supervise
-        self.learn = learn
+        self.learn1 = learn1
+        self.learn2 = learn2
 
     def getProgress(self):
         if self.gameOver:
@@ -645,7 +646,7 @@ class Game:
                         self.unmute()
                         return
                 else:
-                    observation = agent.observationFunction(self.state.deepCopy(), self.filter, self.learn)
+                    observation = agent.observationFunction(self.state.deepCopy(), self.filter, self.learn1, self.learn2)
                 self.unmute()
             else:
                 observation = self.state.deepCopy()

@@ -9,7 +9,6 @@ HOST, PORT = "localhost", 6666
 class NormativeFilter():
 
     def __init__(self, norms, reason, port=PORT):
-        self.process = None
         self.violations = []
         self.norm_base = norms
         self.reasoner = reason
@@ -55,8 +54,16 @@ class NormativeFilter():
             if self.compliant:
                 return 0
             else:
-                #score = message['score']
                 return -1
+        elif message['response'] == 'DUAL-EVALUATION':
+            subideal = message['sub-ideal']
+            if self.compliant:
+                return 0,0
+            else:
+                if subideal:
+                    return -1,0
+                else:
+                    return -1,-1
 
 
     def build_query(self, state, actions, rt):
@@ -67,6 +74,8 @@ class NormativeFilter():
         if rt == 'FILTER':
             to['possible'] = actions
         elif rt == 'EVALUATION':
+            to['action'] = actions[0]
+        elif rt == 'DUAL-EVALUATION':
             to['action'] = actions[0]
         return to
 

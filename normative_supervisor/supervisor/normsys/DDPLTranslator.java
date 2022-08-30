@@ -43,12 +43,23 @@ public class DDPLTranslator extends Translator {
 	public void update(Environment env, ArrayList<String> possible, Game game) {
 		labelsToFacts(env);
 		generateActionNorms(possible);
-		generateRegulativeRules();
 		generateConstitutiveRules(env);
+		generateRegulativeRules();
 		generateDefeaters();
 		generateHierarchies();
 
 	}
+	
+	
+	public void synth_update(Environment env) {
+		labelsToFacts(env);
+		generateConstitutiveRules(env);
+		generateRegulativeRules();
+		generateDefeaters();
+		generateHierarchies();
+	}
+	
+	
 	
 	public void generateActionNorms(ArrayList<String> actions) {
 			normBase.generateNonConcurrence(actions);
@@ -104,7 +115,7 @@ public class DDPLTranslator extends Translator {
 		for(String lab : env.getNegLabels()) {
 			Literal lit = new Literal(lab);
 			Literal nlit = lit.getComplementClone();
-			Rule fact = new Rule(lab, RuleType.DEFEASIBLE);
+			Rule fact = new Rule(lab, RuleType.FACT);
 			try {
 				fact.addHeadLiteral(nlit);
 			} catch (RuleException e) {}
@@ -210,8 +221,17 @@ public class DDPLTranslator extends Translator {
 				}
 				Literal lit = termToLit(n.getPrescription(), true);
 				rule.addHeadLiteral(lit);
-				rule.setMode(obl);
-				
+				if(n.getName().contains("default")) {
+					for(Rule r : rules) {
+						if(r.isConflictRule(rule)) {
+							Superiority sup = new Superiority(r.getLabel(),rule.getLabel());
+							hierarchy.add(sup);
+						}
+					}
+				}
+				else {
+				    rule.setMode(obl);
+				}
 				if(n.getName().contains("concur") || n.getName().contains("req")) {
 					rule.setRuleType(RuleType.DEFEASIBLE);
 					actionRules.add(rule.clone());
