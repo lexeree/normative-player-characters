@@ -1,23 +1,23 @@
 #!/bin/bash
 
 #------------------ CONFIGURE ------------------
-game='pacman'
-normbase='benevolent'
+game='merchant'
+normbase='pacifist'
 reasoner='DDPL2'
-agent='PacmanSubIdealAgent'
+agent='TLQL'
 approximated='no'
 extractor=''
 weight=''
-num_train='5000'
-num_games='100'
+num_train='3000'
+num_games='1'
 record='test'
-OCC='no'
-NGRL='no'
-NGRLS='yes'
+OCC='yes'
+NGRL='yes'
+NGRLS='no'
 part='no'
 fixed_seed='yes'
-graphics='yes'
-layout='mediumOpen'
+graphics='no'
+layout='basic'
 
 
 
@@ -28,6 +28,11 @@ blank=''
 yes='yes'
 no='no'
 pacman='pacman'
+if [[ $game == $pacman ]]; then
+py='python2'
+else 
+py='python3'
+fi
 if [[ $OCC == $yes ]]; then
 s='--supervise'
 else 
@@ -90,10 +95,10 @@ ll=$lab2$layout
 
 #--------------------------------------------------------
 
-java -jar ns_server.jar $game $normbase $reasoner 6666 &
+java -jar ns_server.jar $game $normbase $reasoner 6667 &
 
 sleep 1
 
 cd $game
 
-python2 $game.py -p $agent $ll $opt $f $q -x $num_train -n $all --norm $normbase --reason $reasoner $s $l $l2 $p --rec $record --port 6666 
+$py $game.py -p $agent $ll $opt $f $q -x $num_train -n $all --norm $normbase --reason $reasoner $s $l $l2 $p --rec $record --port 6667 
